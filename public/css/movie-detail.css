@@ -1,0 +1,120 @@
+/* General Styling */
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #faf3e0; /* Warna cream yang lebih lembut */
+    margin: 0;
+    padding: 0;
+}
+
+/* Page Container */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #f5e2f9; /* Warna putih dengan sentuhan hangat */
+    box-shadow: 10 8px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 32px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Styling */
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 24px;
+    text-align: center;
+    font-family: "Georgia", serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    letter-spacing: 1px;
+}
+
+/* Movie Details Styling */
+p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 16px 0;
+    line-height: 1.8;
+    font-family: "Arial", sans-serif;
+}
+
+p strong {
+    font-weight: bold;
+    color: #222;
+}
+
+/* Image Styling */
+img {
+    border-radius: 12px;
+    margin: 24px 0;
+    max-height: 320px;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Back Button */
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    background-color: #ff6f91; /* Pink coral */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    background-color: #ff567a;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-secondary {
+    background-color: #bcbcbc; /* Abu-abu lembut */
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #a3a3a3;
+    color: #fff;
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.4rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    img {
+        max-height: 240px;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 12px 20px;
+    }
+}
