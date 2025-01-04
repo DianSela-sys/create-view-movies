@@ -10,8 +10,12 @@ class Movie extends Model
     use HasFactory;
 
     protected $table = 'movies';
-    protected $keyType = 'string';
 
+    // Menentukan tipe primary key
+    protected $keyType = 'string';  // UUID sebagai primary key
+    public $incrementing = false;   // Menonaktifkan auto-increment
+
+    // Field yang dapat diisi (Mass Assignment)
     protected $fillable = [
         'id',
         'title',
@@ -19,11 +23,11 @@ class Movie extends Model
         'poster',
         'year',
         'available',
-        'genre_id'
+        'genre_id',
     ];
 
     protected $casts = [
-        'genre_id' => 'integer',
+        'genre_id' => 'string',  // Pastikan genre_id adalah UUID (string)
         'available' => 'boolean',
         'year' => 'integer',
     ];
@@ -35,7 +39,31 @@ class Movie extends Model
     // Relasi dengan Genre
     public function genre()
     {
-        return $this->belongsTo(Genre::class);
+        return $this->belongsTo(Genre::class);  // Relasi ke Genre (Many-to-One)
+    }
+
+    // Accessor untuk judul
+    public function getTitleAttribute($value)
+    {
+        return ucfirst($value);  // Mengubah judul menjadi huruf kapital pertama
+    }
+
+    // Mutator untuk judul
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = strtolower($value);  // Menyimpan judul dalam huruf kecil
+    }
+
+    // Scope untuk filter genre
+    public function scopeFilterByGenre($query, $genreId)
+    {
+        return $query->where('genre_id', $genreId);  // Filter berdasarkan genre_id
+    }
+
+    // Scope untuk status tersedia
+    public function scopeAvailable($query)
+    {
+        return $query->where('available', true);  // Filter hanya movie yang tersedia
     }
 
     // Validasi request

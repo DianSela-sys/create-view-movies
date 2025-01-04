@@ -63,10 +63,10 @@ class MovieController extends Controller
         return redirect()->route('movies.index')->with('success', 'Movie created successfully.');
     }
 
-    // MovieController.php
+    // Menampilkan detail movie
     public function show($id)
     {
-        // Menggunakan eager loading untuk memuat relasi genre
+        // Mengambil movie berdasarkan ID dengan eager loading untuk genre
         $movie = Movie::with('genre')->find($id);
 
         // Jika movie tidak ditemukan, redirect dengan pesan error
@@ -76,5 +76,79 @@ class MovieController extends Controller
 
         // Tampilkan halaman detail movie
         return view('movies.show', compact('movie'));
+    }
+
+    // Menampilkan form edit movie
+    public function edit($id)
+    {
+        $movie = Movie::find($id);
+        $genres = Genre::all();
+
+        if (!$movie) {
+            return redirect()->route('movies.index')->with('error', 'Movie not found.');
+        }
+
+        return view('movies.edit', compact('movie', 'genres'));
+    }
+
+    // Update movie yang ada
+    public function update(Request $request, $id)
+    {
+        $movie = Movie::find($id);
+
+        if (!$movie) {
+            return redirect()->route('movies.index')->with('error', 'Movie not found.');
+        }
+
+        // Validasi data
+        $validated = $request->validate([
+            'title' => 'required|string|max:255|unique:movies,title,' . $movie->id,
+            'synopsis' => 'required|string|min:10',
+            'poster' => 'nullable|file|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'year' => 'required|integer|min:1800|max:' . date('Y'),
+            'available' => 'nullable|boolean',
+            'genre_id' => 'required|exists:genres,id',
+        ]);
+
+        // Update poster jika ada file baru
+        if ($request->hasFile('poster')) {
+            // Hapus poster lama
+            if ($movie->poster) {
+                Storage::disk('public')->delete($movie->poster);
+            }
+            $posterPath = $request->file('poster')->store('posters', 'public');
+            $movie->poster = $posterPath;
+        }
+
+        // Update data lainnya
+        $movie->update([
+            'title' => $validated['title'],
+            'synopsis' => $validated['synopsis'],
+            'year' => $validated['year'],
+            'available' => $validated['available'] ?? $movie->available,
+            'genre_id' => $validated['genre_id'],
+        ]);
+
+        return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
+    }
+
+    // Menghapus movie
+    public function destroy($id)
+    {
+        $movie = Movie::find($id);
+
+        if (!$movie) {
+            return redirect()->route('movies.index')->with('error', 'Movie not found.');
+        }
+
+        // Hapus poster dari storage
+        if ($movie->poster) {
+            Storage::disk('public')->delete($movie->poster);
+        }
+
+        // Hapus movie dari database
+        $movie->delete();
+
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');
     }
 }
